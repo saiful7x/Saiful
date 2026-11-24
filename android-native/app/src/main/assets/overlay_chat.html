@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Saiful Chat AI</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      height: 100%;
+      width: 100%;
+      background: #030504;
+      color: #f1f5f9;
+      font-family: system-ui, -apple-system, sans-serif;
+      overflow: hidden;
+      overscroll-behavior: none;
+    }
+    canvas#rain {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      opacity: 0.28;
+      pointer-events: none;
+    }
+    .app {
+      position: relative;
+      z-index: 1;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .header {
+      padding: 12px 14px;
+      background: rgba(8, 10, 12, 0.95);
+      border-bottom: 1px solid rgba(220, 38, 38, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .title { font-size: 15px; font-weight: 700; color: #fff; }
+    .sub { font-size: 11px; color: #fca5a5; margin-top: 2px; }
+    .sig-pill {
+      font-size: 11px;
+      font-weight: 700;
+      color: #fde68a;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      border-radius: 10px;
+      padding: 4px 10px;
+      white-space: nowrap;
+    }
+    .unlock-btn {
+      min-height: 38px;
+      padding: 0 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(239, 68, 68, 0.45);
+      background: rgba(185, 28, 28, 0.25);
+      color: #fecaca;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .unlock-box {
+      display: none;
+      padding: 12px 14px;
+      background: #0d1014;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .unlock-box.open { display: block; }
+    .unlock-row { display: flex; gap: 8px; margin-top: 8px; }
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .bubble {
+      max-width: 86%;
+      padding: 12px 14px;
+      border-radius: 16px;
+      font-size: 14px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+    .bubble.ai {
+      align-self: flex-start;
+      background: rgba(14, 18, 22, 0.94);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      color: #f1f5f9;
+    }
+    .bubble.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #b91c1c, #991b1b);
+      color: #fff;
+    }
+    .dock {
+      padding: 10px 12px 14px;
+      background: rgba(8, 10, 12, 0.96);
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .presets {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+    }
+    .preset-btn {
+      flex-shrink: 0;
+      min-height: 36px;
+      padding: 6px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      background: #0f1613;
+      color: #d1fae5;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+    .composer { display: flex; gap: 8px; }
+    input[type="text"], input[type="password"] {
+      flex: 1;
+      min-height: 46px;
+      padding: 0 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: #050706;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+    .send-btn {
+      min-width: 56px;
+      min-height: 46px;
+      padding: 0 14px;
+      border-radius: 12px;
+      border: 0;
+      background: #dc2626;
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+    }
+    .err { color: #f87171; font-size: 12px; margin-top: 6px; }
+  </style>
+</head>
+<body>
+  <canvas id="rain"></canvas>
+  <div class="app">
+    <div class="header">
+      <div>
+        <div class="title">Saiful Chat AI</div>
+        <div class="sub">Full-Screen Chat · No Close</div>
+      </div>
+      <div class="sig-pill">Developed by Saiful</div>
+      <button class="unlock-btn" onclick="toggleUnlock()">Unlock</button>
+    </div>
+
+    <div id="unlockBox" class="unlock-box">
+      <div style="font-size:13px;font-weight:600;">আনলক করতে পাসওয়ার্ড দিন</div>
+      <div class="unlock-row">
+        <input id="pwInput" type="password" placeholder="পাসওয়ার্ড লিখুন..." />
+        <button class="send-btn" onclick="tryUnlock()">Unlock</button>
+      </div>
+      <div id="pwErr" class="err"></div>
+    </div>
+
+    <div id="messages" class="messages">
+      <div class="bubble ai">আসসালামু আলাইকুম! ফুল-স্ক্রিন এআই চ্যাট চালু হয়েছে। পাসওয়ার্ড দিয়ে আনলক না করা পর্যন্ত এটি বন্ধ হবে না। নিচের প্রশ্নগুলো বেছে নিন অথবা নিজের মতো কথা বলুন।</div>
+    </div>
+
+    <div class="dock">
+      <div class="presets">
+        <button class="preset-btn" onclick="askPreset('creator')">এটা কে বানিয়েছে?</button>
+        <button class="preset-btn" onclick="askPreset('turnoff')">এটা অফ করবো কিভাবে?</button>
+        <button class="preset-btn" onclick="askPreset('help')">তুমি কী কী করতে পারো?</button>
+      </div>
+      <form class="composer" onsubmit="sendChat(event)">
+        <input id="chatInput" type="text" placeholder="এআই-এর সাথে কথা বলুন..." />
+        <button class="send-btn" type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = "https://ais-pre-52b4odpzynsyrsqctztdvj-19070205497.asia-southeast1.run.app/api/chat";
+    const historyList = [];
+
+    (function initRain() {
+      const c = document.getElementById("rain");
+      const ctx = c.getContext("2d");
+      let w = (c.width = window.innerWidth);
+      let h = (c.height = window.innerHeight);
+      const fs = 14;
+      let cols = Math.floor(w / fs);
+      let drops = Array(cols).fill(0).map(() => Math.floor(Math.random() * -(h / fs)));
+      window.addEventListener("resize", () => {
+        w = c.width = window.innerWidth;
+        h = c.height = window.innerHeight;
+        cols = Math.floor(w / fs);
+        drops = Array(cols).fill(0);
+      });
+      setInterval(() => {
+        ctx.fillStyle = "rgba(3,5,4,0.16)";
+        ctx.fillRect(0, 0, w, h);
+        ctx.font = fs + "px monospace";
+        for (let i = 0; i < drops.length; i++) {
+          ctx.fillStyle = i % 3 === 0 ? "#10b981" : "#ef4444";
+          ctx.fillText(Math.random() > 0.5 ? "1" : "0", i * fs, drops[i] * fs);
+          if (drops[i] * fs > h && Math.random() > 0.97) drops[i] = 0;
+          drops[i]++;
+        }
+      }, 48);
+    })();
+
+    function appendBubble(role, text) {
+      const box = document.getElementById("messages");
+      const el = document.createElement("div");
+      el.className = "bubble " + role;
+      el.textContent = text;
+      box.appendChild(el);
+      box.scrollTop = box.scrollHeight;
+    }
+
+    function toggleUnlock() {
+      document.getElementById("unlockBox").classList.toggle("open");
+      document.getElementById("pwErr").textContent = "";
+    }
+
+    function tryUnlock(rawPw) {
+      const pw = (rawPw !== undefined ? rawPw : document.getElementById("pwInput").value).trim();
+      if (window.AndroidOverlay && window.AndroidOverlay.unlockWithPassword(pw)) {
+        return true;
+      }
+      document.getElementById("pwErr").textContent = "ভুল পাসওয়ার্ড! আবার চেষ্টা করুন।";
+      return false;
+    }
+
+    function askPreset(type) {
+      if (type === "creator") {
+        appendBubble("user", "এটা কে বানিয়েছে?");
+        appendBubble("ai", "Saiful Sir — এটি বানিয়েছেন Saiful Sir।");
+      } else if (type === "turnoff") {
+        appendBubble("user", "এটা অফ করবো কিভাবে?");
+        appendBubble("ai", "একটি পাসওয়ার্ড আমাকে দিন, আমি আনলক করে দিচ্ছি। সঠিক পাসওয়ার্ড দিলে ওভারলে বন্ধ হয়ে যাবে।");
+        document.getElementById("unlockBox").classList.add("open");
+      } else {
+        appendBubble("user", "তুমি কী কী করতে পারো?");
+        appendBubble("ai", "আমি বাংলা, বাংলিশ ও ইংরেজিতে আপনার সাথে যেকোনো বিষয়ে কথা বলতে পারি। নিচে আপনার মনের মতো প্রশ্ন লিখুন!");
+      }
+    }
+
+    async function sendChat(e) {
+      e.preventDefault();
+      const input = document.getElementById("chatInput");
+      const text = input.value.trim();
+      if (!text) return;
+      input.value = "";
+      appendBubble("user", text);
+
+      if (text.toLowerCase() === "saiful") {
+        tryUnlock(text);
+        return;
+      }
+
+      historyList.push({ role: "user", text });
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text, history: historyList.slice(-12) })
+        });
+        const data = await res.json();
+        const reply = data.reply || data.error || "উত্তর পাওয়া যায়নি।";
+        appendBubble("ai", reply);
+        historyList.push({ role: "model", text: reply });
+        if (data.showUnlockPrompt) {
+          document.getElementById("unlockBox").classList.add("open");
+        }
+      } catch {
+        appendBubble("ai", "ইন্টারনেট সংযোগ পাওয়া যায়নি। তবে তৈরি করা প্রশ্ন এবং পাসওয়ার্ড আনলক কাজ করবে।");
+      }
+    }
+  </script>
+</body>
+</html>

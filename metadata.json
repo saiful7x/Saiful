@@ -1,0 +1,6 @@
+{
+  "name": "Saiful Overlay AI",
+  "description": "Display-over-apps permission workflow with a locked full-screen AI chat overlay and password-protected unlock.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
