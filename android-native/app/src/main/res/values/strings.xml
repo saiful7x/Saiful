@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Saiful Chat AI</string>
+    <string name="accessibility_service_desc">Prevents notification shade, control center, and app switching while Saiful Chat AI overlay is active.</string>
 </resources>

@@ -2,7 +2,7 @@
 
 @layer base {
   :root {
-    font-family: "Plus Jakarta Sans", "Noto Sans Bengali", system-ui, -apple-system, sans-serif;
+    font-family: "JetBrains Mono", "Noto Sans Bengali", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
     -webkit-tap-highlight-color: transparent;
     color-scheme: dark;
   }
@@ -10,12 +10,13 @@
   body {
     margin: 0;
     background-color: #030504;
-    color: #f1f5f9;
+    color: #e2e8f0;
     overscroll-behavior: none;
+    font-family: "JetBrains Mono", "Noto Sans Bengali", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   }
 
-  h1, h2, h3, .font-display {
-    font-family: "Outfit", "Noto Sans Bengali", system-ui, sans-serif;
+  h1, h2, h3, h4, p, span, button, input, a, div {
+    font-family: "JetBrains Mono", "Noto Sans Bengali", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   }
 }
 

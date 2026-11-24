@@ -5,11 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Saiful Chat AI</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
     body {
       background: #030504;
-      color: #f1f5f9;
-      font-family: system-ui, -apple-system, sans-serif;
+      color: #e2e8f0;
       min-height: 100vh;
       overflow-x: hidden;
     }
@@ -19,18 +23,17 @@
       width: 100%;
       height: 100%;
       z-index: 0;
-      opacity: 0.42;
+      opacity: 0.45;
       pointer-events: none;
     }
     .code-stream {
       position: fixed;
-      top: 56px;
+      top: 54px;
       left: 0;
       right: 0;
-      padding: 8px 16px;
-      font-family: monospace;
+      padding: 8px 14px;
       font-size: 11px;
-      color: rgba(16, 185, 129, 0.35);
+      color: rgba(34, 211, 238, 0.38);
       pointer-events: none;
       z-index: 0;
       white-space: nowrap;
@@ -43,7 +46,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      padding: 20px 16px 28px;
+      padding: 18px 16px 26px;
       max-width: 540px;
       margin: 0 auto;
     }
@@ -52,28 +55,28 @@
       align-items: center;
       justify-content: space-between;
       padding-bottom: 14px;
-      border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+      border-bottom: 1px solid rgba(16, 185, 129, 0.25);
     }
-    .brand { font-size: 18px; font-weight: 700; color: #fff; }
-    .step { font-size: 12px; color: #34d399; }
+    .brand { font-size: 17px; font-weight: 800; color: #34d399; }
+    .step { font-size: 12px; color: #22d3ee; }
     .card {
-      background: rgba(10, 14, 12, 0.92);
-      border: 1px solid rgba(16, 185, 129, 0.22);
-      border-radius: 22px;
-      padding: 22px;
-      margin: 20px 0;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+      background: rgba(8, 12, 10, 0.94);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      border-radius: 20px;
+      padding: 20px;
+      margin: 16px 0;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
     }
-    .kicker { font-size: 12px; font-weight: 600; color: #f87171; margin-bottom: 8px; }
-    h1 { font-size: 24px; line-height: 1.25; margin-bottom: 12px; color: #fff; }
-    .desc { font-size: 14px; line-height: 1.6; color: #94a3b8; margin-bottom: 18px; }
+    .kicker { font-size: 12px; font-weight: 700; color: #22d3ee; margin-bottom: 8px; }
+    h1 { font-size: 21px; line-height: 1.3; margin-bottom: 12px; color: #6ee7b7; }
+    .desc { font-size: 13px; line-height: 1.6; color: #cbd5e1; margin-bottom: 16px; }
     .btn {
       width: 100%;
-      min-height: 52px;
+      min-height: 50px;
       border: 0;
       border-radius: 14px;
-      font-size: 15px;
-      font-weight: 700;
+      font-size: 14px;
+      font-weight: 800;
       color: #fff;
       cursor: pointer;
       background: linear-gradient(90deg, #b91c1c, #dc2626);
@@ -85,36 +88,53 @@
     .btn-emerald {
       background: linear-gradient(90deg, #047857, #10b981);
     }
-    .sig {
-      background: linear-gradient(135deg, #14110c, #090a0d);
-      border: 1px solid rgba(245, 158, 11, 0.35);
-      border-radius: 16px;
-      padding: 14px 16px;
+    .btn-sub {
+      width: 100%;
+      min-height: 42px;
+      border-radius: 12px;
+      border: 1px solid rgba(34, 211, 238, 0.35);
+      background: rgba(8, 51, 68, 0.45);
+      color: #67e8f9;
+      font-size: 12px;
+      font-weight: 700;
+      margin-top: 10px;
+      padding: 8px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    .sig-label { font-size: 11px; color: rgba(251, 191, 36, 0.8); }
-    .sig-name {
-      font-size: 16px;
-      font-weight: 800;
-      color: #fde68a;
+    .btn-sub.ok {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: rgba(6, 78, 59, 0.35);
+      color: #6ee7b7;
     }
+    .sig {
+      background: linear-gradient(135deg, #14110c, #070908);
+      border: 1px solid rgba(251, 191, 36, 0.4);
+      border-radius: 16px;
+      padding: 13px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .sig-label { font-size: 10px; color: #fbbf24; }
+    .sig-name { font-size: 15px; font-weight: 800; color: #fde68a; }
     .hidden { display: none; }
     .preset-item {
       padding: 10px 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-bottom: 1px solid rgba(16, 185, 129, 0.16);
       font-size: 13px;
-      color: #e2e8f0;
+      color: #6ee7b7;
+      font-weight: 700;
     }
     .preset-item:last-child { border-bottom: 0; }
-    .preset-sub { font-size: 12px; color: #94a3b8; margin-top: 2px; }
+    .preset-sub { font-size: 12px; color: #fbbf24; margin-top: 3px; font-weight: 500; }
   </style>
 </head>
 <body>
   <canvas id="rain"></canvas>
   <div class="code-stream">
-    01001011 01100101 · attachOverlayChannel(DISPLAY_OVER_APPS) · stream = active
+    01001011 · attachOverlayChannel(DISPLAY_OVER_APPS) · stream = active
   </div>
 
   <div class="shell">
@@ -129,7 +149,7 @@
       <h1>চ্যাটিং করার জন্য ডিসপ্লে পারমিশন দিন</h1>
       <p class="desc">
         এআই-এর সাথে ফুল-স্ক্রিন চ্যাটিং শুরু করার জন্য ডিসপ্লে ওভারলে পারমিশন দিন।
-        পারমিশন দেওয়ার পর ভেতরে গিয়ে Start Chatting চাপলে ওভারলে চ্যাট চালু হবে।
+        পারমিশন দেওয়ার পর ভেতরে গিয়ে <span style="color:#fbbf24;font-weight:700;">Start Chatting</span> চাপলে ওভারলে চ্যাট চালু হবে।
       </p>
       <button class="btn btn-emerald" onclick="requestPermission()">
         চ্যাটিং করার জন্য পারমিশন দিন
@@ -141,14 +161,24 @@
       <div class="kicker" style="color:#34d399;">চ্যাটিং পারমিশন সক্রিয়</div>
       <h1>ফুল-স্ক্রিন এআই চ্যাটিং শুরু করুন</h1>
       <p class="desc">
-        Start Chatting চাপলেই স্ক্রিনজুড়ে ওভারলে চ্যাট ওপেন হবে। কোনো ক্লোজ বাটন থাকবে না এবং
-        পাসওয়ার্ড দিলে ওভারলে বন্ধ হয়ে অ্যাপ স্টপ হবে।
+        <span style="color:#fbbf24;font-weight:700;">Start Chatting</span> চাপলেই স্ক্রিনজুড়ে ওভারলে চ্যাট ওপেন হবে।
+        ভেতরেই ছোট উইন্ডোতে <span style="color:#67e8f9;">Telegram</span> ও <span style="color:#6ee7b7;">Call</span> ব্যবহার করতে পারবেন।
       </p>
       <button class="btn" onclick="startChatting()">
         Start Chatting
       </button>
 
-      <div style="margin-top:20px; border-top:1px solid rgba(255,255,255,0.1); padding-top:14px;">
+      <button id="accBtn" class="btn-sub" onclick="requestAccessibility()">
+        <span>শাটার ও কন্ট্রোল সেন্টার ব্লক (Accessibility)</span>
+        <span id="accBadge" style="color:#f87171;">OFF · Enable</span>
+      </button>
+
+      <button id="callPermBtn" class="btn-sub" onclick="requestCallPerm()">
+        <span>ডাইরেক্ট কল পারমিশন (Call)</span>
+        <span id="callBadge" style="color:#fbbf24;">Allow</span>
+      </button>
+
+      <div style="margin-top:16px; border-top:1px solid rgba(16,185,129,0.2); padding-top:12px;">
         <div class="preset-item">
           01. এটা কে বানিয়েছে?
           <div class="preset-sub">উত্তর: Saiful Sir</div>
@@ -165,7 +195,7 @@
         <div class="sig-label">Crafted &amp; Engineered</div>
         <div class="sig-name">Developed by Saiful</div>
       </div>
-      <div style="font-size:12px; color:#94a3b8;">Saiful Sir</div>
+      <div style="font-size:12px; color:#22d3ee;">Saiful Sir</div>
     </div>
   </div>
 
@@ -189,7 +219,7 @@
         ctx.fillRect(0, 0, w, h);
         ctx.font = fs + "px monospace";
         for (let i = 0; i < drops.length; i++) {
-          ctx.fillStyle = i % 7 === 0 ? "#f87171" : "#10b981";
+          ctx.fillStyle = i % 7 === 0 ? "#f87171" : i % 5 === 0 ? "#22d3ee" : "#10b981";
           ctx.fillText(Math.random() > 0.5 ? "1" : "0", i * fs, drops[i] * fs);
           if (drops[i] * fs > h && Math.random() > 0.97) drops[i] = 0;
           drops[i]++;
@@ -197,22 +227,50 @@
       }, 48);
     })();
 
-    window.updateOverlayPermission = function(granted) {
-      document.getElementById("permissionView").classList.toggle("hidden", !!granted);
-      document.getElementById("dashboardView").classList.toggle("hidden", !granted);
-      document.getElementById("stepText").textContent = granted ? "Ready to Chat" : "Permission Step";
+    window.updateOverlayPermission = function(overlayGranted, accGranted, callGranted) {
+      document.getElementById("permissionView").classList.toggle("hidden", !!overlayGranted);
+      document.getElementById("dashboardView").classList.toggle("hidden", !overlayGranted);
+      document.getElementById("stepText").textContent = overlayGranted ? "Ready to Chat" : "Permission Step";
+
+      const accBtn = document.getElementById("accBtn");
+      const accBadge = document.getElementById("accBadge");
+      if (accGranted) {
+        accBtn.classList.add("ok");
+        accBadge.textContent = "ACTIVE";
+        accBadge.style.color = "#34d399";
+      } else {
+        accBtn.classList.remove("ok");
+        accBadge.textContent = "OFF · Tap to Enable";
+        accBadge.style.color = "#f87171";
+      }
+
+      const callBtn = document.getElementById("callPermBtn");
+      const callBadge = document.getElementById("callBadge");
+      if (callGranted) {
+        callBtn.classList.add("ok");
+        callBadge.textContent = "ALLOWED";
+        callBadge.style.color = "#34d399";
+      } else {
+        callBtn.classList.remove("ok");
+        callBadge.textContent = "Tap to Allow";
+        callBadge.style.color = "#fbbf24";
+      }
     };
 
     function requestPermission() {
-      if (window.AndroidApp) {
-        window.AndroidApp.requestOverlayPermission();
-      }
+      if (window.AndroidApp) window.AndroidApp.requestOverlayPermission();
+    }
+
+    function requestAccessibility() {
+      if (window.AndroidApp) window.AndroidApp.requestAccessibilityPermission();
+    }
+
+    function requestCallPerm() {
+      if (window.AndroidApp) window.AndroidApp.requestCallPermission();
     }
 
     function startChatting() {
-      if (window.AndroidApp) {
-        window.AndroidApp.startChattingOverlay();
-      }
+      if (window.AndroidApp) window.AndroidApp.startChattingOverlay();
     }
   </script>
 </body>

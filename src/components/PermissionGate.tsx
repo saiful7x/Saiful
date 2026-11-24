@@ -47,35 +47,35 @@ export default function PermissionGate({ onGrant }: PermissionGateProps) {
         <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-stretch">
           <section className="lg:col-span-6 flex flex-col justify-center space-y-6">
             <div className="space-y-3">
-              <p className="text-sm font-semibold text-red-400 tracking-wide">
+              <p className="text-sm font-semibold text-cyan-400 tracking-wide">
                 Display Permission Required
               </p>
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-display font-bold tracking-tight text-white text-balance leading-[1.15]">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-emerald-300 text-balance leading-[1.15]">
                 চ্যাটিং করার জন্য ডিসপ্লে পারমিশন দিন
               </h1>
-              <p className="text-base text-slate-400 leading-relaxed max-w-xl">
+              <p className="text-base text-slate-300 leading-relaxed max-w-xl">
                 অ্যাপের ভেতরে প্রবেশ করে এআই-এর সাথে ফুল-স্ক্রিন চ্যাটিং শুরু করার জন্য ডিসপ্লে ওভারলে
-                পারমিশন দিন। পারমিশন দিলে Start Chatting চাপতেই ফুল-স্ক্রিন চ্যাট ওপেন হবে।
+                পারমিশন দিন। পারমিশন দিলে <span className="text-amber-300 font-semibold">Start Chatting</span> চাপতেই ফুল-স্ক্রিন চ্যাট ওপেন হবে।
               </p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
-              <div className="bg-[#0C0D12] border border-white/10 rounded-2xl p-4 space-y-1.5">
-                <div className="flex items-center gap-2 text-white font-semibold text-sm">
-                  <MessageSquare className="w-4 h-4 text-red-400 shrink-0" />
+              <div className="bg-[#080C0A]/90 border border-emerald-500/30 rounded-2xl p-4 space-y-1.5">
+                <div className="flex items-center gap-2 text-emerald-300 font-semibold text-sm">
+                  <MessageSquare className="w-4 h-4 text-cyan-400 shrink-0" />
                   <span>ফুল-স্ক্রিন এআই চ্যাটিং</span>
                 </div>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-xs text-slate-300 leading-relaxed">
                   চ্যাটিং চালু করলে স্ক্রিনজুড়ে চ্যাট ওভারলে ওপেন হবে এবং তৈরি করা প্রশ্ন দেখাবে।
                 </p>
               </div>
 
-              <div className="bg-[#0C0D12] border border-white/10 rounded-2xl p-4 space-y-1.5">
-                <div className="flex items-center gap-2 text-white font-semibold text-sm">
+              <div className="bg-[#080C0A]/90 border border-rose-500/30 rounded-2xl p-4 space-y-1.5">
+                <div className="flex items-center gap-2 text-rose-300 font-semibold text-sm">
                   <Lock className="w-4 h-4 text-amber-300 shrink-0" />
                   <span>পাসওয়ার্ড সুরক্ষিত</span>
                 </div>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-xs text-slate-300 leading-relaxed">
                   চ্যাটিং চলাকালীন কোনো ক্লোজ বাটন থাকবে না; পাসওয়ার্ড দিলে ওভারলে বন্ধ হবে।
                 </p>
               </div>
@@ -85,16 +85,16 @@ export default function PermissionGate({ onGrant }: PermissionGateProps) {
           </section>
 
           <section className="lg:col-span-6 flex flex-col justify-center">
-            <div className="bg-[#0C0D12] border border-white/12 rounded-3xl p-6 sm:p-8 shadow-2xl shadow-black/60 space-y-6">
+            <div className="bg-[#080C0A]/95 border border-emerald-500/30 rounded-3xl p-6 sm:p-8 shadow-2xl shadow-black/70 space-y-6">
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 rounded-2xl bg-red-950/60 border border-red-500/30 flex items-center justify-center shrink-0">
-                  <Layers className="w-6 h-6 text-red-400" />
+                <div className="w-12 h-12 rounded-2xl bg-emerald-950/70 border border-emerald-400/40 flex items-center justify-center shrink-0">
+                  <Layers className="w-6 h-6 text-emerald-400" />
                 </div>
                 <div className="space-y-1">
-                  <h2 className="text-lg font-display font-semibold text-white">
+                  <h2 className="text-lg font-semibold text-cyan-300">
                     Display over other apps
                   </h2>
-                  <p className="text-sm text-slate-400">
+                  <p className="text-sm text-emerald-300/80">
                     Saiful Chat AI · চ্যাটিং করার জন্য পারমিশন
                   </p>
                 </div>

@@ -97,36 +97,36 @@ export default function ControlDashboard({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-stretch">
           <section
             id="overview"
-            className="lg:col-span-7 bg-[#0C0D12] border border-white/12 rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-8 shadow-2xl shadow-black/50"
+            className="lg:col-span-7 bg-[#080C0A]/95 border border-emerald-500/30 rounded-3xl p-6 sm:p-8 flex flex-col justify-between space-y-8 shadow-2xl shadow-black/70"
           >
             <div className="space-y-4">
-              <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-slate-400">
+              <div className="flex flex-wrap items-center gap-2 text-xs font-medium text-cyan-300">
                 <span className="text-emerald-400 font-semibold">চ্যাটিং পারমিশন সক্রিয়</span>
                 <span aria-hidden="true">·</span>
                 <span>State: {isStopped ? 'Stopped' : 'Ready to Chat'}</span>
               </div>
 
-              <h1 className="text-2xl sm:text-4xl font-display font-bold tracking-tight text-white text-balance leading-[1.15]">
+              <h1 className="text-2xl sm:text-4xl font-bold tracking-tight text-emerald-300 text-balance leading-[1.15]">
                 ফুল-স্ক্রিন এআই চ্যাটিং শুরু করুন
               </h1>
 
-              <p className="text-sm sm:text-base text-slate-400 leading-relaxed max-w-2xl">
-                Start Chatting চাপলেই আপনার স্ক্রিনে ফুল-স্ক্রিন এআই চ্যাট ওভারলে ওপেন হবে। আনলক না করা পর্যন্ত কোনো ক্লোজ
-                বাটন থাকবে না, ব্যাক বা মিনিমাইজ করা যাবে না এবং ওপরের শাটার/জেসচার নিয়ন্ত্রিত থাকবে।
+              <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-2xl">
+                <span className="text-amber-300 font-semibold">Start Chatting</span> চাপলেই আপনার স্ক্রিনে ফুল-স্ক্রিন এআই চ্যাট ওভারলে ওপেন হবে। আনলক না করা পর্যন্ত কোনো ক্লোজ
+                বাটন থাকবে না, এবং ভেতরেই ছোট উইন্ডোতে Telegram ও Call ব্যবহার করা যাবে।
               </p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-white/10">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-emerald-500/20">
               <div className="space-y-1">
-                <div className="text-xs text-slate-500">ওভারলে মোড</div>
-                <div className="text-sm font-semibold text-white">Kiosk Fullscreen</div>
+                <div className="text-xs text-cyan-400/80">ওভারলে মোড</div>
+                <div className="text-sm font-semibold text-emerald-300">Kiosk Fullscreen</div>
               </div>
               <div className="space-y-1">
-                <div className="text-xs text-slate-500">শাটার ও মিনিমাইজ</div>
-                <div className="text-sm font-semibold text-red-400">Locked &amp; Blocked</div>
+                <div className="text-xs text-cyan-400/80">মিনি অ্যাপস</div>
+                <div className="text-sm font-semibold text-cyan-300">Telegram &amp; Call</div>
               </div>
               <div className="space-y-1">
-                <div className="text-xs text-slate-500">এক্সিট সিস্টেম</div>
+                <div className="text-xs text-cyan-400/80">এক্সিট সিস্টেম</div>
                 <div className="text-sm font-semibold text-amber-300">Password Only</div>
               </div>
             </div>
@@ -135,7 +135,7 @@ export default function ControlDashboard({
               <button
                 type="button"
                 onClick={onStartOverlay}
-                className="w-full min-h-[54px] px-6 py-4 rounded-2xl bg-gradient-to-r from-red-700 via-red-600 to-red-700 hover:from-red-600 hover:to-red-500 active:scale-[0.99] text-white font-display font-bold text-base flex items-center justify-center gap-2.5 transition-all whitespace-nowrap shadow-xl shadow-red-950/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                className="w-full min-h-[54px] px-6 py-4 rounded-2xl bg-gradient-to-r from-red-700 via-red-600 to-red-700 hover:from-red-600 hover:to-red-500 active:scale-[0.99] text-white font-bold text-base flex items-center justify-center gap-2.5 transition-all whitespace-nowrap shadow-xl shadow-red-950/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
               >
                 <Play className="w-5 h-5 fill-current shrink-0" />
                 <span>Start Chatting</span>
@@ -148,26 +148,26 @@ export default function ControlDashboard({
           <aside className="lg:col-span-5 flex flex-col gap-6">
             <section
               id="questions"
-              className="bg-[#0C0D12] border border-white/12 rounded-3xl p-6 space-y-4 flex-1"
+              className="bg-[#080C0A]/95 border border-cyan-500/25 rounded-3xl p-6 space-y-4 flex-1"
             >
               <div className="flex items-center gap-2.5">
-                <MessageSquareText className="w-5 h-5 text-red-400 shrink-0" />
-                <h2 className="text-base font-display font-semibold text-white">
+                <MessageSquareText className="w-5 h-5 text-cyan-400 shrink-0" />
+                <h2 className="text-base font-semibold text-cyan-300">
                   আগে থেকে তৈরি প্রশ্নসমূহ
                 </h2>
               </div>
 
-              <p className="text-xs text-slate-400 leading-relaxed">
-                লকড ওভারলের ভেতরে এআই চ্যাটের সাথে মন খুলে কথা বলার পাশাপাশি নিচের প্রশ্নগুলো দেখাবে:
+              <p className="text-xs text-slate-300 leading-relaxed">
+                ওভারলের ভেতরে এআই চ্যাটের সাথে মন খুলে কথা বলার পাশাপাশি নিচের প্রশ্নগুলো দেখাবে:
               </p>
 
-              <div className="divide-y divide-white/10">
+              <div className="divide-y divide-emerald-500/15">
                 {PRESET_QUESTIONS.map((item, idx) => (
                   <div key={item.id} className="py-3 first:pt-1 last:pb-1 space-y-1">
-                    <div className="text-sm font-semibold text-slate-100">
+                    <div className="text-sm font-semibold text-emerald-300">
                       0{idx + 1}. {item.questionBn}
                     </div>
-                    <div className="text-xs text-slate-400">
+                    <div className="text-xs text-amber-300/85">
                       {item.id === 'creator'
                         ? 'উত্তর: Saiful Sir'
                         : item.id === 'turn-off'
@@ -181,18 +181,18 @@ export default function ControlDashboard({
 
             <section
               id="lockdown"
-              className="bg-[#0C0D12] border border-white/12 rounded-3xl p-6 space-y-4"
+              className="bg-[#080C0A]/95 border border-rose-500/25 rounded-3xl p-6 space-y-4"
             >
               <div className="flex items-center gap-2.5">
-                <ShieldAlert className="w-5 h-5 text-amber-300 shrink-0" />
-                <h2 className="text-base font-display font-semibold text-white">
+                <ShieldAlert className="w-5 h-5 text-rose-400 shrink-0" />
+                <h2 className="text-base font-semibold text-rose-300">
                   ওভারলে সুরক্ষা ও আনলক সিস্টেম
                 </h2>
               </div>
 
-              <p className="text-xs text-slate-400 leading-relaxed">
-                চ্যাটিং শুরু হলে ফুল-স্ক্রিন কিয়স্ক, কি-বোর্ড লক, স্ক্রিন ওয়েক-লক এবং টপ-এজ শাটার সোয়াইপ
-                প্রতিরোধ সক্রিয় থাকে। শুধুমাত্র সঠিক পাসওয়ার্ড দিলেই অ্যাপ স্টপ হবে।
+              <p className="text-xs text-slate-300 leading-relaxed">
+                চ্যাটিং শুরু হলে ফুল-স্ক্রিন কিয়স্ক, কি-বোর্ড লক, স্ক্রিন ওয়েক-লক এবং শাটার প্রতিরোধ
+                সক্রিয় থাকে। শুধুমাত্র সঠিক পাসওয়ার্ড দিলেই অ্যাপ স্টপ হবে।
               </p>
 
               <div

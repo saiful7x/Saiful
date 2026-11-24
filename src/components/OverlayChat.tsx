@@ -13,6 +13,11 @@ import {
   KeyRound,
   AlertCircle,
   ShieldAlert,
+  Phone,
+  MessageCircle,
+  X,
+  Delete,
+  ExternalLink,
 } from 'lucide-react';
 import { PRESET_QUESTIONS } from '../data/presets';
 import { ChatMessage, PresetQuestion } from '../types';
@@ -70,6 +75,10 @@ export default function OverlayChat({ onUnlockSuccess }: OverlayChatProps) {
 
   const [lockAlert, setLockAlert] = useState('');
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
+
+  const [miniApp, setMiniApp] = useState<'telegram' | 'call' | null>(null);
+  const [dialNumber, setDialNumber] = useState('');
+  const [callNotice, setCallNotice] = useState('');
 
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
   const chatInputRef = useRef<HTMLInputElement | null>(null);
@@ -425,19 +434,19 @@ export default function OverlayChat({ onUnlockSuccess }: OverlayChatProps) {
         className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(ellipse_at_top,rgba(185,28,28,0.20),transparent_70%)]"
       />
 
-      {/* Top Overlay Header — No Close Button */}
-      <header className="relative z-10 shrink-0 border-b border-red-500/20 bg-[#090A0F]/95 backdrop-blur-md touch-none">
+      {/* Top Overlay Header — No Close Button for Main Overlay */}
+      <header className="relative z-10 shrink-0 border-b border-emerald-500/25 bg-[#050806]/95 backdrop-blur-md touch-none">
         <div className="max-w-3xl mx-auto px-4 py-2.5 flex items-center justify-between gap-3">
           <div className="min-w-0 flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-red-950/70 border border-red-500/35 flex items-center justify-center shrink-0">
-              <ShieldAlert className="w-4 h-4 text-red-400" />
+            <div className="w-9 h-9 rounded-xl bg-emerald-950/70 border border-emerald-500/40 flex items-center justify-center shrink-0">
+              <ShieldAlert className="w-4 h-4 text-emerald-400" />
             </div>
             <div className="min-w-0">
-              <h1 className="text-sm sm:text-base font-display font-bold text-white truncate">
+              <h1 className="text-sm sm:text-base font-bold text-emerald-300 truncate">
                 Saiful Chat AI
               </h1>
-              <div className="flex items-center gap-2 text-[11px] text-slate-400 truncate">
-                <span className="font-mono-tabular text-red-300">{formatDuration(elapsedSeconds)}</span>
+              <div className="flex items-center gap-2 text-[11px] text-cyan-300/80 truncate">
+                <span className="font-mono-tabular text-rose-400">{formatDuration(elapsedSeconds)}</span>
                 <span aria-hidden="true">·</span>
                 <span>Full-Screen Chat · No Close</span>
               </div>
@@ -450,19 +459,47 @@ export default function OverlayChat({ onUnlockSuccess }: OverlayChatProps) {
               setUnlockModalOpen((prev) => !prev);
               setUnlockError('');
             }}
-            className="min-h-[40px] px-3.5 py-2 rounded-xl bg-red-700/25 hover:bg-red-700/40 border border-red-500/40 text-red-100 text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+            className="min-h-[40px] px-3.5 py-2 rounded-xl bg-red-700/25 hover:bg-red-700/40 border border-red-500/45 text-rose-200 text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
           >
-            <Lock className="w-3.5 h-3.5 shrink-0 text-red-300" />
+            <Lock className="w-3.5 h-3.5 shrink-0 text-amber-300" />
             <span>Unlock</span>
           </button>
         </div>
 
-        {/* Premium Developer Signature Bar */}
-        <div className="max-w-3xl mx-auto px-4 pb-2.5 flex items-center justify-between gap-3">
+        {/* Mini-Apps Launcher Strip + Premium Developer Signature */}
+        <div className="max-w-3xl mx-auto px-4 pb-2.5 flex flex-wrap items-center justify-between gap-2">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setMiniApp((prev) => (prev === 'telegram' ? null : 'telegram'))}
+              className={`min-h-[36px] px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 ${
+                miniApp === 'telegram'
+                  ? 'bg-cyan-600/30 border-cyan-400 text-cyan-200'
+                  : 'bg-cyan-950/50 hover:bg-cyan-900/50 border-cyan-500/35 text-cyan-300'
+              }`}
+            >
+              <MessageCircle className="w-3.5 h-3.5 shrink-0" />
+              <span>Telegram</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setCallNotice('');
+                setMiniApp((prev) => (prev === 'call' ? null : 'call'));
+              }}
+              className={`min-h-[36px] px-3 py-1.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 ${
+                miniApp === 'call'
+                  ? 'bg-emerald-600/30 border-emerald-400 text-emerald-200'
+                  : 'bg-emerald-950/50 hover:bg-emerald-900/50 border-emerald-500/35 text-emerald-300'
+              }`}
+            >
+              <Phone className="w-3.5 h-3.5 shrink-0" />
+              <span>Call</span>
+            </button>
+          </div>
+
           <DeveloperSignature compact />
-          <span className="text-[11px] text-slate-500 hidden sm:inline">
-            Password Protected Kiosk Mode
-          </span>
         </div>
       </header>
 
@@ -650,10 +687,10 @@ export default function OverlayChat({ onUnlockSuccess }: OverlayChatProps) {
       </div>
 
       {/* Bottom Preset Questions + Chat Composer Dock */}
-      <div className="relative z-10 shrink-0 border-t border-white/10 bg-[#090A0F] pb-safe touch-none">
+      <div className="relative z-10 shrink-0 border-t border-emerald-500/20 bg-[#050806]/95 pb-safe touch-none">
         <div className="max-w-3xl mx-auto px-4 pt-3 pb-3 space-y-3">
           <div className="space-y-1.5">
-            <div className="text-[11px] font-medium text-slate-400">
+            <div className="text-[11px] font-medium text-cyan-300/80">
               আগে থেকে তৈরি প্রশ্ন (ট্যাপ করুন):
             </div>
             <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar touch-pan-x">
@@ -663,7 +700,7 @@ export default function OverlayChat({ onUnlockSuccess }: OverlayChatProps) {
                   type="button"
                   onClick={() => handlePresetClick(preset)}
                   disabled={isLoading || unlockingSuccess}
-                  className="min-h-[40px] px-3.5 py-2 rounded-xl bg-[#141722] hover:bg-[#1C2030] active:scale-[0.98] border border-white/12 text-xs sm:text-sm font-medium text-slate-100 whitespace-nowrap shrink-0 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
+                  className="min-h-[40px] px-3.5 py-2 rounded-xl bg-[#0A120E] hover:bg-[#111E17] active:scale-[0.98] border border-emerald-500/30 text-xs sm:text-sm font-medium text-emerald-200 whitespace-nowrap shrink-0 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
                 >
                   {preset.questionBn}
                 </button>
@@ -679,7 +716,7 @@ export default function OverlayChat({ onUnlockSuccess }: OverlayChatProps) {
               onChange={(e) => setInputText(e.target.value)}
               placeholder="এআই-এর সাথে কথা বলুন অথবা আনলক পাসওয়ার্ড লিখুন..."
               disabled={isLoading || unlockingSuccess}
-              className="flex-1 min-w-0 min-h-[48px] px-4 py-2.5 rounded-2xl bg-[#050507] border border-white/15 text-sm sm:text-[15px] text-white placeholder:text-slate-500 focus:outline-none focus:border-red-500"
+              className="flex-1 min-w-0 min-h-[48px] px-4 py-2.5 rounded-2xl bg-[#030504] border border-emerald-500/30 text-sm sm:text-[15px] text-emerald-100 placeholder:text-slate-500 focus:outline-none focus:border-cyan-400"
             />
             <button
               type="submit"
@@ -692,6 +729,114 @@ export default function OverlayChat({ onUnlockSuccess }: OverlayChatProps) {
           </form>
         </div>
       </div>
+
+      {/* Floating Mini-Window inside the Locked Overlay (has small X button to close only this mini-window) */}
+      {miniApp && (
+        <div className="fixed inset-0 z-[55] flex items-center justify-center p-3 sm:p-6 bg-black/55 backdrop-blur-[2px]">
+          <div className="w-full max-w-md h-[70dvh] max-h-[580px] rounded-2xl bg-[#060908] border border-cyan-400/45 shadow-2xl shadow-black flex flex-col overflow-hidden">
+            <div className="shrink-0 px-3.5 py-2.5 bg-[#0A100D] border-b border-white/10 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 min-w-0">
+                {miniApp === 'telegram' ? (
+                  <MessageCircle className="w-4 h-4 text-cyan-400 shrink-0" />
+                ) : (
+                  <Phone className="w-4 h-4 text-emerald-400 shrink-0" />
+                )}
+                <span className="text-xs font-semibold text-cyan-300 truncate">
+                  {miniApp === 'telegram'
+                    ? 'Telegram · t.me/free1_panel'
+                    : 'Phone Dialer · Mini Overlay'}
+                </span>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setMiniApp(null)}
+                aria-label="Close mini window"
+                className="w-8 h-8 rounded-lg bg-rose-700/30 hover:bg-rose-600/50 border border-rose-500/40 text-rose-200 flex items-center justify-center transition-colors shrink-0"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {miniApp === 'telegram' ? (
+              <div className="flex-1 flex flex-col bg-[#080B0A] overflow-hidden">
+                <div className="px-3 py-2 bg-[#0C1310] border-b border-white/10 flex items-center justify-between gap-2 text-[11px]">
+                  <span className="text-emerald-300 truncate">
+                    Channel: https://t.me/free1_panel
+                  </span>
+                  <a
+                    href="https://t.me/free1_panel"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="text-cyan-300 hover:text-cyan-200 flex items-center gap-1 whitespace-nowrap shrink-0"
+                  >
+                    <span>Open App</span>
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+                <iframe
+                  title="Telegram Free1 Panel Channel"
+                  src="https://t.me/s/free1_panel"
+                  className="w-full flex-1 border-0 bg-[#0B0F0D]"
+                />
+              </div>
+            ) : (
+              <div className="flex-1 p-4 flex flex-col justify-between bg-[#060908]">
+                <div className="space-y-2">
+                  <div className="text-[11px] text-emerald-400">নম্বর টাইপ করে কল করুন:</div>
+                  <div className="min-h-[48px] px-3 py-2 rounded-xl bg-[#030504] border border-emerald-500/30 flex items-center justify-between gap-2">
+                    <span className="text-lg font-mono-tabular text-cyan-300 truncate">
+                      {dialNumber || '01XXXXXXXXX'}
+                    </span>
+                    {dialNumber && (
+                      <button
+                        type="button"
+                        onClick={() => setDialNumber((prev) => prev.slice(0, -1))}
+                        aria-label="Backspace"
+                        className="p-1.5 text-rose-300 hover:text-rose-200"
+                      >
+                        <Delete className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                  {callNotice && (
+                    <div className="text-xs text-amber-300 font-medium">{callNotice}</div>
+                  )}
+                </div>
+
+                <div className="grid grid-cols-3 gap-2 my-3">
+                  {['1', '2', '3', '4', '5', '6', '7', '8', '9', '*', '0', '#'].map((digit) => (
+                    <button
+                      key={digit}
+                      type="button"
+                      onClick={() => setDialNumber((prev) => (prev.length < 18 ? prev + digit : prev))}
+                      className="min-h-[44px] rounded-xl bg-[#0E1512] hover:bg-[#15201B] border border-emerald-500/20 text-base font-bold text-emerald-200 active:scale-95 transition-all"
+                    >
+                      {digit}
+                    </button>
+                  ))}
+                </div>
+
+                <a
+                  href={dialNumber ? `tel:${dialNumber}` : undefined}
+                  onClick={(e) => {
+                    if (!dialNumber) {
+                      e.preventDefault();
+                      setCallNotice('দয়া করে আগে একটি ফোন নম্বর লিখুন।');
+                    } else {
+                      setCallNotice(`কল করা হচ্ছে: ${dialNumber}`);
+                    }
+                  }}
+                  className="w-full min-h-[46px] rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-bold flex items-center justify-center gap-2 transition-colors"
+                >
+                  <Phone className="w-4 h-4" />
+                  <span>Call Now</span>
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

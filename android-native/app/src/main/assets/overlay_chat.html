@@ -5,13 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Saiful Chat AI</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
     html, body {
       height: 100%;
       width: 100%;
       background: #030504;
-      color: #f1f5f9;
-      font-family: system-ui, -apple-system, sans-serif;
+      color: #e2e8f0;
       overflow: hidden;
       overscroll-behavior: none;
     }
@@ -21,7 +25,7 @@
       width: 100%;
       height: 100%;
       z-index: 0;
-      opacity: 0.28;
+      opacity: 0.3;
       pointer-events: none;
     }
     .app {
@@ -32,32 +36,67 @@
       flex-direction: column;
     }
     .header {
-      padding: 12px 14px;
-      background: rgba(8, 10, 12, 0.95);
-      border-bottom: 1px solid rgba(220, 38, 38, 0.3);
+      padding: 10px 14px;
+      background: rgba(5, 8, 6, 0.96);
+      border-bottom: 1px solid rgba(16, 185, 129, 0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .header-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
     }
-    .title { font-size: 15px; font-weight: 700; color: #fff; }
-    .sub { font-size: 11px; color: #fca5a5; margin-top: 2px; }
+    .title { font-size: 15px; font-weight: 800; color: #34d399; }
+    .sub { font-size: 11px; color: #22d3ee; margin-top: 2px; }
+    .header-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .mini-btns {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .mini-btn {
+      min-height: 34px;
+      padding: 4px 11px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .mini-tg {
+      background: rgba(8, 51, 68, 0.65);
+      border: 1px solid rgba(34, 211, 238, 0.45);
+      color: #67e8f9;
+    }
+    .mini-call {
+      background: rgba(6, 78, 59, 0.65);
+      border: 1px solid rgba(16, 185, 129, 0.45);
+      color: #6ee7b7;
+    }
     .sig-pill {
       font-size: 11px;
       font-weight: 700;
       color: #fde68a;
-      background: rgba(245, 158, 11, 0.12);
-      border: 1px solid rgba(245, 158, 11, 0.35);
+      background: rgba(245, 158, 11, 0.14);
+      border: 1px solid rgba(251, 191, 36, 0.4);
       border-radius: 10px;
-      padding: 4px 10px;
+      padding: 5px 10px;
       white-space: nowrap;
     }
     .unlock-btn {
       min-height: 38px;
       padding: 0 12px;
       border-radius: 10px;
-      border: 1px solid rgba(239, 68, 68, 0.45);
-      background: rgba(185, 28, 28, 0.25);
+      border: 1px solid rgba(239, 68, 68, 0.5);
+      background: rgba(185, 28, 28, 0.3);
       color: #fecaca;
       font-size: 12px;
       font-weight: 700;
@@ -66,8 +105,8 @@
     .unlock-box {
       display: none;
       padding: 12px 14px;
-      background: #0d1014;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      background: #090e0b;
+      border-bottom: 1px solid rgba(251, 191, 36, 0.25);
     }
     .unlock-box.open { display: block; }
     .unlock-row { display: flex; gap: 8px; margin-top: 8px; }
@@ -83,16 +122,16 @@
       max-width: 86%;
       padding: 12px 14px;
       border-radius: 16px;
-      font-size: 14px;
-      line-height: 1.5;
+      font-size: 13px;
+      line-height: 1.55;
       white-space: pre-wrap;
       word-break: break-word;
     }
     .bubble.ai {
       align-self: flex-start;
-      background: rgba(14, 18, 22, 0.94);
-      border: 1px solid rgba(16, 185, 129, 0.25);
-      color: #f1f5f9;
+      background: rgba(8, 14, 11, 0.94);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #a7f3d0;
     }
     .bubble.user {
       align-self: flex-end;
@@ -101,8 +140,8 @@
     }
     .dock {
       padding: 10px 12px 14px;
-      background: rgba(8, 10, 12, 0.96);
-      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(5, 8, 6, 0.96);
+      border-top: 1px solid rgba(16, 185, 129, 0.25);
     }
     .presets {
       display: flex;
@@ -115,11 +154,11 @@
       min-height: 36px;
       padding: 6px 12px;
       border-radius: 10px;
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      background: #0f1613;
-      color: #d1fae5;
+      border: 1px solid rgba(34, 211, 238, 0.35);
+      background: #081214;
+      color: #67e8f9;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       white-space: nowrap;
     }
     .composer { display: flex; gap: 8px; }
@@ -128,10 +167,10 @@
       min-height: 46px;
       padding: 0 14px;
       border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      background: #050706;
-      color: #fff;
-      font-size: 14px;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      background: #030504;
+      color: #6ee7b7;
+      font-size: 13px;
       outline: none;
     }
     .send-btn {
@@ -142,26 +181,113 @@
       border: 0;
       background: #dc2626;
       color: #fff;
-      font-weight: 700;
+      font-weight: 800;
       font-size: 13px;
     }
     .err { color: #f87171; font-size: 12px; margin-top: 6px; }
+
+    /* Call Mini-Window inside Overlay */
+    .call-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      background: rgba(0, 0, 0, 0.65);
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .call-modal.open { display: flex; }
+    .call-card {
+      width: 100%;
+      max-width: 340px;
+      background: #060a08;
+      border: 1px solid rgba(16, 185, 129, 0.5);
+      border-radius: 18px;
+      overflow: hidden;
+    }
+    .call-top {
+      padding: 10px 12px;
+      background: #0a120e;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .call-x {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid rgba(244, 63, 94, 0.45);
+      background: rgba(127, 29, 29, 0.6);
+      color: #fecaca;
+      font-weight: 800;
+      font-size: 14px;
+    }
+    .call-body { padding: 14px; }
+    .dial-display {
+      min-height: 46px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: #030504;
+      border: 1px solid rgba(34, 211, 238, 0.35);
+      color: #67e8f9;
+      font-size: 18px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .key-btn {
+      min-height: 44px;
+      border-radius: 10px;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      background: #0c1410;
+      color: #6ee7b7;
+      font-size: 17px;
+      font-weight: 800;
+    }
+    .call-go {
+      width: 100%;
+      min-height: 46px;
+      border-radius: 12px;
+      border: 0;
+      background: #059669;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+    }
   </style>
 </head>
 <body>
   <canvas id="rain"></canvas>
   <div class="app">
     <div class="header">
-      <div>
-        <div class="title">Saiful Chat AI</div>
-        <div class="sub">Full-Screen Chat · No Close</div>
+      <div class="header-top">
+        <div>
+          <div class="title">Saiful Chat AI</div>
+          <div class="sub">Full-Screen Chat · No Close</div>
+        </div>
+        <button class="unlock-btn" onclick="toggleUnlock()">Unlock</button>
       </div>
-      <div class="sig-pill">Developed by Saiful</div>
-      <button class="unlock-btn" onclick="toggleUnlock()">Unlock</button>
+      <div class="header-actions">
+        <div class="mini-btns">
+          <button class="mini-btn mini-tg" onclick="openTelegram()">Telegram</button>
+          <button class="mini-btn mini-call" onclick="openCallDialer()">Call</button>
+        </div>
+        <div class="sig-pill">Developed by Saiful</div>
+      </div>
     </div>
 
     <div id="unlockBox" class="unlock-box">
-      <div style="font-size:13px;font-weight:600;">আনলক করতে পাসওয়ার্ড দিন</div>
+      <div style="font-size:12px;font-weight:700;color:#fbbf24;">আনলক করতে পাসওয়ার্ড দিন</div>
       <div class="unlock-row">
         <input id="pwInput" type="password" placeholder="পাসওয়ার্ড লিখুন..." />
         <button class="send-btn" onclick="tryUnlock()">Unlock</button>
@@ -170,7 +296,7 @@
     </div>
 
     <div id="messages" class="messages">
-      <div class="bubble ai">আসসালামু আলাইকুম! ফুল-স্ক্রিন এআই চ্যাট চালু হয়েছে। পাসওয়ার্ড দিয়ে আনলক না করা পর্যন্ত এটি বন্ধ হবে না। নিচের প্রশ্নগুলো বেছে নিন অথবা নিজের মতো কথা বলুন।</div>
+      <div class="bubble ai">আসসালামু আলাইকুম! ফুল-স্ক্রিন এআই চ্যাট চালু হয়েছে। পাসওয়ার্ড দিয়ে আনলক না করা পর্যন্ত এটি বন্ধ হবে না। উপরে থাকা Telegram ও Call বাটন থেকে ছোট উইন্ডোতে ব্যবহার করতে পারেন।</div>
     </div>
 
     <div class="dock">
@@ -186,9 +312,41 @@
     </div>
   </div>
 
+  <!-- Floating Mini Call Dialer Window (has small X close button) -->
+  <div id="callModal" class="call-modal">
+    <div class="call-card">
+      <div class="call-top">
+        <span style="font-size:12px;font-weight:700;color:#6ee7b7;">Phone Dialer · Mini</span>
+        <button class="call-x" onclick="closeCallDialer()">✕</button>
+      </div>
+      <div class="call-body">
+        <div class="dial-display">
+          <span id="dialText">01XXXXXXXXX</span>
+          <button onclick="backspaceDial()" style="background:none;border:0;color:#f87171;font-size:13px;font-weight:700;">DEL</button>
+        </div>
+        <div class="keypad">
+          <button class="key-btn" onclick="pressDigit('1')">1</button>
+          <button class="key-btn" onclick="pressDigit('2')">2</button>
+          <button class="key-btn" onclick="pressDigit('3')">3</button>
+          <button class="key-btn" onclick="pressDigit('4')">4</button>
+          <button class="key-btn" onclick="pressDigit('5')">5</button>
+          <button class="key-btn" onclick="pressDigit('6')">6</button>
+          <button class="key-btn" onclick="pressDigit('7')">7</button>
+          <button class="key-btn" onclick="pressDigit('8')">8</button>
+          <button class="key-btn" onclick="pressDigit('9')">9</button>
+          <button class="key-btn" onclick="pressDigit('*')">*</button>
+          <button class="key-btn" onclick="pressDigit('0')">0</button>
+          <button class="key-btn" onclick="pressDigit('#')">#</button>
+        </div>
+        <button class="call-go" onclick="startCallNow()">Call Now</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const API_URL = "https://ais-pre-52b4odpzynsyrsqctztdvj-19070205497.asia-southeast1.run.app/api/chat";
     const historyList = [];
+    let dialStr = "";
 
     (function initRain() {
       const c = document.getElementById("rain");
@@ -209,7 +367,7 @@
         ctx.fillRect(0, 0, w, h);
         ctx.font = fs + "px monospace";
         for (let i = 0; i < drops.length; i++) {
-          ctx.fillStyle = i % 3 === 0 ? "#10b981" : "#ef4444";
+          ctx.fillStyle = i % 3 === 0 ? "#10b981" : i % 5 === 0 ? "#22d3ee" : "#ef4444";
           ctx.fillText(Math.random() > 0.5 ? "1" : "0", i * fs, drops[i] * fs);
           if (drops[i] * fs > h && Math.random() > 0.97) drops[i] = 0;
           drops[i]++;
@@ -224,6 +382,40 @@
       el.textContent = text;
       box.appendChild(el);
       box.scrollTop = box.scrollHeight;
+    }
+
+    function openTelegram() {
+      if (window.AndroidOverlay && window.AndroidOverlay.openTelegramMini) {
+        window.AndroidOverlay.openTelegramMini();
+      }
+    }
+
+    function openCallDialer() {
+      document.getElementById("callModal").classList.add("open");
+    }
+
+    function closeCallDialer() {
+      document.getElementById("callModal").classList.remove("open");
+    }
+
+    function pressDigit(d) {
+      if (dialStr.length < 18) {
+        dialStr += d;
+        document.getElementById("dialText").textContent = dialStr;
+      }
+    }
+
+    function backspaceDial() {
+      dialStr = dialStr.slice(0, -1);
+      document.getElementById("dialText").textContent = dialStr || "01XXXXXXXXX";
+    }
+
+    function startCallNow() {
+      if (!dialStr) return;
+      if (window.AndroidOverlay && window.AndroidOverlay.placeCall) {
+        window.AndroidOverlay.placeCall(dialStr);
+        closeCallDialer();
+      }
     }
 
     function toggleUnlock() {
